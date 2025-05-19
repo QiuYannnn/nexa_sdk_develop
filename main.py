@@ -1,5 +1,6 @@
 import os
 import time
+import getopt, sys
 
 from file_utils import (
     display_directory_tree,
@@ -114,37 +115,98 @@ def get_yes_no(prompt):
         else:
             print("Please enter 'yes' or 'no'. To exit, type '/exit'.")
 
-def get_mode_selection():
-    """Prompt the user to select a mode."""
+MODE_OPTIONS = {
+    '1': 'content',
+    '2': 'date',
+    '3': 'type',
+    'content': 'content',
+    'date': 'date',
+    'type': 'type'
+}
+
+def get_mode_selection(response = None):
+    """Prompt the user to select a mode, or use provided response if valid."""
+    if response in MODE_OPTIONS:
+        return MODE_OPTIONS[response]
+    
     while True:
         print("Please choose the mode to organize your files:")
         print("1. By Content")
         print("2. By Date")
         print("3. By Type")
+        
         response = input("Enter 1, 2, or 3 (or type '/exit' to exit): ").strip()
+
         if response == '/exit':
             print("Exiting program.")
             exit()
-        elif response == '1':
-            return 'content'
-        elif response == '2':
-            return 'date'
-        elif response == '3':
-            return 'type'
-        else:
-            print("Invalid selection. Please enter 1, 2, or 3. To exit, type '/exit'.")
 
+        if response in MODE_OPTIONS:
+            return MODE_OPTIONS[response]
+        
+        print("Invalid selection. Please enter 1, 2, or 3. To exit, type '/exit'.")
+
+def process_command_line_arguments():
+    argumentList = sys.argv[1:]
+
+    options = "hv:i:o:c:"
+    long_options = ["help","verbose=", "input=", "output=", "clasification_mode="]
+
+    verbose = None
+    input_path = None
+    output_path = None
+    clasification_mode = None
+    try:
+        arguments, values = getopt.getopt(argumentList, options, long_options)
+    except getopt.error as err:
+        print(str(err))
+        sys.exit(2)
+    
+    print("Arguments: ", arguments)
+    print("Values: ", values)   
+    for currentArgument, currentValue in arguments:
+        if currentArgument in ("-h", "--help"):
+            print("Usage: python main.py [-h] [-v MODE] [-i INPUT] [-o OUTPUT] [-c CLASIFICATION_MODE]")
+            print("Options:")
+            print("  -h, --help           Show this help message and exit")
+            print("  -v, --verbose        Enable verbose mode.")
+            print("                       Optional value: 0 = silent, >0 = verbose level.")
+            print("                       Silent mode logs all outputs to a text file: operation_log.txt")
+            print("                       If not provided, it will be asked")
+            print("  -i, --input PATH     Specify the input directory (if not provided, it will be asked)")
+            print("  -o, --output PATH    Specify the destination directory (default: 'organized_folder' in input)")
+            print("  -c, --classification_mode CLASIFICATION_MODE    Specify the classification mode (default: 'None')")
+            print("                       Optional values: 1 = 'content', 2 = 'date', 3 = 'type'")
+
+            sys.exit(0)
+
+        if currentArgument in ("-v", "--verbose"):
+            verbose = currentValue
+        if currentArgument in ("-i", "--input"):
+            input_path = currentValue
+        if currentArgument in ("-o", "--output"):
+            output_path = currentValue
+        if currentArgument in ("-c", "--classification_mode"):
+            clasification_mode = currentValue
+
+    return verbose, input_path, output_path, clasification_mode
+    
 def main():
     # Ensure NLTK data is downloaded efficiently and quietly
     ensure_nltk_data()
-
+    verbose, input_path, output_path, clasification_mode = process_command_line_arguments()
     # Start with dry run set to True
     dry_run = True
 
     # Display silent mode explanation before asking
     print("-" * 50)
     print("**NOTE: Silent mode logs all outputs to a text file instead of displaying them in the terminal.")
-    silent_mode = get_yes_no("Would you like to enable silent mode? (yes/no): ")
+    if verbose is None:
+        silent_mode = get_yes_no("Would you like to enable silent mode? (yes/no): ")
+    else: 
+        silent_mode = verbose == 0
+        if silent_mode:
+            print(f"Silent mode enabled with verbose level: {verbose}")
     if silent_mode:
         log_file = 'operation_log.txt'
     else:
@@ -156,7 +218,8 @@ def main():
             print("-" * 50)
 
         # Get input and output paths once per directory
-        input_path = input("Enter the path of the directory you want to organize: ").strip()
+        if input_path is None:
+            input_path = input("Enter the path of the directory you want to organize: ").strip()
         while not os.path.exists(input_path):
             message = f"Input path {input_path} does not exist. Please enter a valid path."
             if silent_mode:
@@ -177,7 +240,8 @@ def main():
             print("-" * 50)
 
         # Default output path is a folder named "organized_folder" in the same directory as the input path
-        output_path = input("Enter the path to store organized files and folders (press Enter to use 'organized_folder' in the input directory): ").strip()
+        if output_path is None:
+            output_path = input("Enter the path to store organized files and folders (press Enter to use 'organized_folder' in the input directory): ").strip()
         if not output_path:
             # Get the parent directory of the input path and append 'organized_folder'
             output_path = os.path.join(os.path.dirname(input_path), 'organized_folder')
@@ -212,7 +276,7 @@ def main():
 
         # Loop for selecting sorting methods
         while True:
-            mode = get_mode_selection()
+            mode = get_mode_selection(clasification_mode)
 
             if mode == 'content':
                 # Proceed with content mode
