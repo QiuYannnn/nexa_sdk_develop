@@ -194,7 +194,7 @@ def process_command_line_arguments():
 def main():
     # Ensure NLTK data is downloaded efficiently and quietly
     ensure_nltk_data()
-    verbose, input_path, output_path, clasification_mode = process_command_line_arguments()
+    verbose, input_path, output_path, mode = process_command_line_arguments()
     # Start with dry run set to True
     dry_run = True
 
@@ -276,7 +276,7 @@ def main():
 
         # Loop for selecting sorting methods
         while True:
-            mode = get_mode_selection(clasification_mode)
+            mode = get_mode_selection(mode)
 
             if mode == 'content':
                 # Proceed with content mode
@@ -386,6 +386,7 @@ def main():
                 # Ask if the user wants to try another sorting method
                 another_sort = get_yes_no("Would you like to choose another sorting method? (yes/no): ")
                 if another_sort:
+                    mode = None # Reset mode
                     continue  # Loop back to mode selection
                 else:
                     print("Operation canceled by the user.")
