@@ -9,9 +9,13 @@ __pycache__/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
+# vscode folder
+.vscode/
+
 # Virtual environment folders
 env/
 venv/
+.venv/
 
 # Ignore log files and temporary files
 *.log
@@ -21,3 +25,6 @@ venv/
 # Ignore example output files
 organized_folder/
 operation_log.txt
+
+# Ignore test folder
+test/
