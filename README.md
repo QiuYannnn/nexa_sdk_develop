@@ -148,13 +148,13 @@ conda activate local_file_organizer
 #### CPU Installation
 To install the CPU version of Nexa SDK, run:
 ```bash
-pip install nexaai --prefer-binary --index-url https://nexaai.github.io/nexa-sdk/whl/cpu --extra-index-url https://pypi.org/simple --no-cache-dir
+pip install nexaai --prefer-binary --index-url https://github.nexa.ai/whl/cpu/nexaai/ --extra-index-url https://pypi.org/simple --no-cache-dir
 ```
 
 #### GPU Installation (Metal - macOS)
 For the GPU version supporting Metal (macOS), run:
 ```bash
-CMAKE_ARGS="-DGGML_METAL=ON -DSD_METAL=ON" pip install nexaai --prefer-binary --index-url https://nexaai.github.io/nexa-sdk/whl/metal --extra-index-url https://pypi.org/simple --no-cache-dir
+CMAKE_ARGS="-DGGML_METAL=ON -DSD_METAL=ON" pip install nexaai --prefer-binary --index-url https://github.nexa.ai/whl/metal/nexaai/ --extra-index-url https://pypi.org/simple --no-cache-dir
 ```
 For detailed installation instructions of Nexa SDK for **CUDA** and **AMD GPU** support, please refer to the [Installation section](https://github.com/NexaAI/nexa-sdk?tab=readme-ov-file#installation) in the main README.
 
