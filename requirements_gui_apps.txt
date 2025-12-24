@@ -1,0 +1,20 @@
+# Requirements for Script Hub and Conversion Hub GUI Applications
+# Install with: pip install -r requirements_gui_apps.txt
+
+# Core GUI Framework
+customtkinter>=5.2.0
+
+# Document Conversion (optional but recommended)
+markdown>=3.5.0
+beautifulsoup4>=4.12.0
+PyPDF2>=3.0.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+python-docx>=1.0.0
+
+# For PDF to HTML conversion (optional - requires wkhtmltopdf installed)
+# pdfkit>=1.0.0
+
+# For advanced HTML parsing
+lxml>=4.9.0
+html5lib>=1.1
