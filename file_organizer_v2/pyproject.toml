@@ -60,10 +60,22 @@ dependencies = [
     "redis>=5.0.0",
 
     # Audio processing
-    "faster-whisper>=0.10.0",  # Will add when implementing audio
+    "faster-whisper>=1.0.0",
+    "torch>=2.1.0",  # Optional: GPU acceleration
+    "mutagen>=1.47.0",  # Audio metadata extraction
+    "tinytag>=1.10.0",  # Lightweight audio metadata fallback
+    "pydub>=0.25.0",  # Audio manipulation
+    "ffmpeg-python>=0.2.0",  # Audio/video preprocessing
+
+    # Video processing
+    "opencv-python>=4.8.0",  # Video analysis
+    "scenedetect[opencv]>=0.6.0",  # Scene detection
 
     # Deduplication
     "imagededup>=0.3.0",
+
+    # Configuration
+    "pyyaml>=6.0.0",  # YAML config parsing
 
     # Utilities
     "pydantic>=2.5.0",
