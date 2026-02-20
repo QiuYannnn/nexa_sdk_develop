@@ -37,9 +37,9 @@ jobs:
         working-directory: file_organizer_v2
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pytest tests/ -m "not regression" --override-ini="addopts="
+            pytest tests/ -m "not regression" -n auto --timeout=30 --override-ini="addopts="
           else
-            pytest tests/ --override-ini="addopts="
+            pytest tests/ -n auto --timeout=30 --override-ini="addopts="
           fi
 
   frontend-compat:
